@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NewJerusalem Archive</title>
+
+  <!-- CSS: controls the appearance and layout of the website -->
+  <style>
+    :root {
+      --bg: #faf8f5;
+      --panel: #ffffff;
+      --text: #2c2a29;
+      --muted: #736f6d;
+      --accent: #8c2828;
+      --border: #e8e4dc;
+      --font-serif: Georgia, 'Times New Roman', serif;
+      --font-sans: system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-weight: bold;
+      letter-spacing: -0.3px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    select, button {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    button.btn-primary {
+      background: var(--accent);
+      color: white;
+      border: none;
+      font-weight: 500;
+    }
+
+    .workspace {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .reader-pane {
+      flex: 1;
+      padding: 40px 12%;
+      overflow-y: auto;
+      font-family: var(--font-serif);
+      line-height: 1.8;
+      font-size: 1.15rem;
+    }
+
+    .passage-title {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .verse {
+      margin-bottom: 14px;
+    }
+
+    .verse-num {
+      font-family: var(--font-sans);
+      font-weight: bold;
+      color: var(--accent);
+      font-size: 0.75rem;
+      vertical-align: super;
+      margin-right: 6px;
+    }
+
+    .sidebar {
+      width: 320px;
+      background: var(--panel);
+      border-left: 1px solid var(--border);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 140px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: var(--font-sans);
+      background: var(--bg);
+      resize: vertical;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HTML: the visible structure and content of the website -->
+
+  <header>
+    <div class="logo">NewJerusalem Archive</div>
+    <div class="controls">
+      <select id="passage-select">
+        <option value="john 1">John 1</option>
+        <option value="genesis 1">Genesis 1</option>
+        <option value="romans 8">Romans 8</option>
+        <option value="psalms 23">Psalm 23</option>
+      </select>
+      <button class="btn-primary" onclick="loadScripture()">Load Chapter</button>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <main class="reader-pane" id="reader">
+      <h1 class="passage-title">Welcome to the Archive</h1>
+      <p style="text-align: center; color: var(--muted);">
+        Select a chapter from the top menu and click <strong>Load Chapter</strong>.
+      </p>
+    </main>
+
+    <aside class="sidebar">
+      <div class="sidebar-title">Study Tools</div>
+      <p style="font-size: 0.85rem; color: var(--muted);">
+        Click on verses to attach cross-references or lexicon entries.
+      </p>
+      
+      <div class="sidebar-title">Personal Notes</div>
+      <textarea placeholder="Write your theology or study notes here..."></textarea>
+    </aside>
+  </div>
+
+  <!-- JavaScript: controls interactions and loads Scripture data -->
+  <script>
+    async function loadScripture() {
+      const selection = document.getElementById('passage-select').value;
+      const reader = document.getElementById('reader');
+      
+      reader.innerHTML = '<p style="text-align:center; margin-top: 40px;">Fetching text...</p>';
+
+      try {
+        const res = await fetch(`https://bible-api.com/${encodeURIComponent(selection)}`);
+        const data = await res.json();
+
+        let html = `<h1 class="passage-title">${data.reference}</h1>`;
+        data.verses.forEach(v => {
+          html += `<p class="verse"><span class="verse-num">${v.verse}</span>${v.text}</p>`;
+        });
+
+        reader.innerHTML = html;
+      } catch (err) {
+        reader.innerHTML = '<p style="color:red; text-align:center;">Could not load scripture. Check your connection.</p>';
+      }
+    }
+  </script>
+
+</body>
+</html>
