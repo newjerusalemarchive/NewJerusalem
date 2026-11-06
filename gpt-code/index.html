@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="New Jerusalem Archive: read the Bible and compare WEB and KJV verse by verse.">
+  <title>New Jerusalem Archive — Review Copy</title>
+  <!-- Standalone review copy. All CSS and JavaScript are in this file.
+       Open in a browser with internet access. No build or API key required.
+       This file does not replace the repository's original index.html. -->
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050507; --panel: #0e0a18; --text: #f5f3ff;
+      --muted: #b5aec8; --accent: #a78bfa; --border: #302442;
+      --font-serif: Georgia, 'Times New Roman', serif;
+      --font-sans: system-ui, -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; height: 100vh; height: 100dvh;
+      display: flex; flex-direction: column; overflow: hidden;
+      color: var(--text); font-family: var(--font-sans);
+      background: radial-gradient(ellipse at 15% 0%, #312e8166, transparent 55%),
+                  radial-gradient(ellipse at 90% 20%, #581c874d, transparent 55%), var(--bg);
+    }
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 18px; padding: 16px 24px;
+      background: #0c0913; border-bottom: 1px solid var(--border);
+      box-shadow: 0 8px 30px #0008;
+    }
+    .brand { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; min-width: 0; }
+    .logo {
+      margin: 0; color: #fff; font: 800 1.4rem var(--font-serif);
+      text-shadow: 0 0 24px #7c3aed40;
+    }
+    .donkey-art {
+      margin: 0; flex-shrink: 0; max-width: 100%; overflow: hidden;
+      font-family: 'DejaVu Sans Mono', 'Noto Sans Mono', monospace;
+      font-size: 4px; line-height: 1; letter-spacing: 0;
+      font-variant-ligatures: none; white-space: pre; color: #f5f3ff;
+    }
+    .controls { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; margin: 0; }
+    .field { display: flex; flex-direction: column; gap: 6px; font-size: .8rem; color: var(--muted); }
+    select, button, textarea {
+      padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px;
+      background: #120e1d; color: var(--text); font: inherit;
+    }
+    select, button { cursor: pointer; font-size: .9rem; }
+    button.btn-primary {
+      background: linear-gradient(135deg, #4338ca, #581c87);
+      color: #fff; font-weight: 700; box-shadow: 0 4px 20px #6d28d930;
+    }
+    button:hover:not(:disabled) { filter: brightness(1.12); }
+    :disabled { opacity: .65; cursor: wait; }
+    :focus-visible { outline: 2px solid #ddd6fe; outline-offset: 3px; }
+    .workspace { display: flex; flex: 1; min-height: 0; overflow: hidden; }
+    .reader-pane {
+      flex: 1; min-width: 0; padding: 28px clamp(16px, 4vw, 60px);
+      overflow-y: auto; font-family: var(--font-serif); font-size: 1.1rem; line-height: 1.8;
+    }
+    .passage-title {
+      margin: 0 0 22px; padding-bottom: 12px; border-bottom: 1px solid #7c3aed40;
+      color: #fff; text-align: center; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 500;
+    }
+    .welcome { max-width: 38rem; margin: 24px auto; text-align: center; color: var(--muted); }
+    .compare-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .compare-labels {
+      position: sticky; top: -1px; z-index: 1; padding: 12px 0;
+      background: #0e0a18; color: #fff; border-bottom: 1px solid var(--border);
+      font: 700 .8rem var(--font-sans);
+    }
+    .compare-labels > :first-child { border-top: 2px solid #6366f1; padding-top: 8px; }
+    .compare-labels > :last-child { border-top: 2px solid #a78bfa; padding-top: 8px; }
+    .verse {
+      min-width: 0; margin: 6px 0; padding: 10px 8px;
+      border-left: 2px solid transparent; border-radius: 8px; overflow-wrap: anywhere;
+    }
+    .verse:hover { background: linear-gradient(90deg, #4f46e518, #6b21a818); border-left-color: #8b5cf6; }
+    .verse-num { color: #c4b5fd; margin-right: 7px; font: 700 .75rem var(--font-sans); vertical-align: super; }
+    .missing { color: var(--muted); font-style: italic; }
+    .sidebar {
+      width: 290px; flex-shrink: 0; padding: 20px; overflow-y: auto;
+      border-left: 1px solid var(--border); background: #0c0913;
+    }
+    .sidebar-title { margin: 0 0 10px; color: #fff; font-size: .85rem; text-transform: uppercase; letter-spacing: .05em; }
+    .sidebar p { color: var(--muted); font-size: .85rem; line-height: 1.6; }
+    .sidebar section + section { margin-top: 26px; }
+    .note-label { display: block; margin-bottom: 10px; }
+    textarea { width: 100%; min-height: 180px; resize: vertical; font: .95rem/1.7 var(--font-sans); }
+    textarea::placeholder { color: var(--muted); }
+    #load-status, #notes-status { font-size: .8rem; }
+    .error { color: #fbcfe8; }
+    a { color: #c7d2fe; }
+    ::selection { background: #5b21b6; color: #fff; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    @media (max-width: 850px) {
+      body { height: auto; min-height: 100vh; min-height: 100dvh; overflow: auto; }
+      header { align-items: stretch; padding: 16px; }
+      .controls { width: 100%; }
+      .field { flex: 1; min-width: 100px; }
+      .field select { width: 100%; min-width: 0; }
+      .workspace { display: block; overflow: visible; }
+      .reader-pane { padding: 24px 14px; overflow: visible; }
+      .sidebar { width: 100%; border-left: 0; border-top: 1px solid var(--border); overflow: visible; }
+      .compare-row { gap: 10px; }
+      .verse { padding: 8px 4px; font-size: 1rem; }
+    }
+    @media (max-width: 600px) { .donkey-art { font-size: 3px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1 class="logo">New Jerusalem Archive</h1>
+      <pre class="donkey-art" role="img" aria-label="Donkey illustration in Unicode art">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣷⠀⠀⠀⢠⣿
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡾⢋⢻⠀⠀⡠⢁⢸
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⢁⡾⣜⣠⡿⢭⣿⠞
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣴⡷⢿⣟⢓⣛⠁⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣿⡿⢿⠏⠀⠁⠀⢼⣆⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⠟⣿⣣⣎⣠⣀⠀⠀⠀⢻⣆
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣚⣿⣿⣿⣿⠃⣿⣻⣿⡟⠛⠢⣤⠀⣸⠛
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡤⠶⠶⠶⠶⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣶⣶⣿⣿⣿⣿⡧⢸⣏⠻⣿⣿⣜⠆⢼⡆⡇⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣾⣿⠛⠃⢤⡀⠘⠛⠛⢿⣿⠿⢿⣶⣦⣤⣤⣤⣤⣤⣿⣟⠛⠛⠉⠸⢿⣿⠁⢸⣿⣷⣿⣿⣿⠶⠚⠻⡇⠀
+⠀⠀⠀⠀⠀⠀⠀⣠⢾⡿⣿⠃⠀⠀⠀⠹⣷⣤⠀⠈⠙⠂⠀⠈⠛⠿⣟⠻⢭⣽⣿⠛⢷⡀⠀⠀⠀⠀⢀⣿⣿⣿⡿⠿⣿⣆⣀⠀⢘⡄
+⠀⠀⠀⠀⠀⠀⣰⣿⣾⠁⠀⢀⠀⠀⣤⣤⡌⠙⢷⣦⡀⠀⠀⠴⢤⣄⠀⠽⠶⠂⠹⡀⠀⠈⠓⠀⠀⣸⠻⣿⣿⡟⠀⠀⠹⣿⣿⣿⡟⠉
+⠀⠀⠀⠀⠀⠀⣿⣿⢻⡄⠀⣿⣀⠀⠈⢻⣄⠀⠀⠙⠿⡦⠀⠀⠔⠲⠴⠖⠀⠀⠀⠁⠀⠀⠀⠀⢸⣿⣠⢻⠏⠀⠀⠀⠀⠙⠻⠛⠁⠀
+⠀⠀⠀⠀⠀⢀⣿⣿⣾⣧⠀⠘⣿⡇⠀⢤⣿⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⠃⡀⠀⠀⠀⠀⠀⢸⡇⡿⣏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⢀⣾⣿⡿⠉⣿⠀⠀⠻⠁⠀⠺⢿⣧⣷⡀⠀⠀⠀⠀⠀⠀⢠⣇⢿⣴⡇⠀⠀⠀⠀⣠⣿⢠⣷⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⣀⣤⣾⣿⣿⡿⠃⠀⡇⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣦⡀⠀⠀⠀⠐⠛⠟⠘⣿⣇⠀⠀⠀⢀⣿⣧⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠈⣭⣿⣿⣿⡿⣁⣠⠞⠀⠀⠀⠀⣠⣤⣤⣴⣿⠟⠿⣿⣟⡲⠤⠀⠀⠀⠀⠀⢻⣿⡇⠀⣦⣾⣿⠻⠁⠈⢆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⢰⡿⣿⣿⣿⠁⡫⣿⠂⠀⠀⣠⣼⣿⣿⣿⡿⠁⢀⡔⠁⠉⠙⠓⠺⠿⠶⠶⠶⠿⢻⠀⠀⢹⡟⠻⢷⣤⡀⠈⢳⡀⠀⠀⠀⠀⠀⠀⠀⠀
+⢸⢱⡟⠃⠸⠀⢳⣽⢀⣤⠞⠋⠀⣼⡿⠋⢀⣴⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢇⠀⠹⣇⠀⠀⠉⠓⢦⠈⠛⢦⠀⠀⠀⠀⠀⠀⠀
+⠈⠘⠃⠢⠀⠀⠀⠹⡆⢰⠀⣠⣾⠟⠁⡠⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣆⠀⢸⠀⠀⠀⠀⢸⢷⣶⡞⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⢻⠈⡶⢷⡄⠀⠞⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣋⣠⣼⠆⠀⠀⠀⡸⢰⠏⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣼⢀⣹⠀⢻⡂⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢻⣹⠏⠀⢀⣠⡾⠃⣸⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣤⠛⣻⡏⠀⠀⣿⡀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⡇⢠⠀⣿⠉⣻⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣿⣿⠟⠀⠀⠀⢻⣇⢸⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣄⣈⣾⠛⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣹⣛⣹⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣉⣙⢦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠛⠃⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣧⣤⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿</pre>
+    </div>
+    <form class="controls" id="chapter-form">
+      <label class="field">Book
+        <select id="book-select" aria-label="Bible book"></select>
+      </label>
+      <label class="field">Chapter
+        <select id="chapter-select" aria-label="Chapter"></select>
+      </label>
+      <button class="btn-primary" id="load-button" type="submit">Load Chapter</button>
+    </form>
+  </header>
+  <div class="workspace">
+    <main class="reader-pane" id="reader" aria-busy="false">
+      <h2 class="passage-title">Welcome to the Archive</h2>
+      <p class="welcome">Choose a book and chapter, then click <strong>Load Chapter</strong>.<br>Read the World English Bible and King James Version side by side, one verse per row.</p>
+      <noscript>This reader needs JavaScript enabled to load Bible chapters.</noscript>
+    </main>
+    <aside class="sidebar" aria-label="Study tools and notes">
+      <section>
+        <h2 class="sidebar-title">Study Tools</h2>
+        <p><strong>Left: WEB. Right: KJV.</strong> Both columns load the selected chapter. Luke includes all 24 chapters.</p>
+        <p>Verses are paired by number, not by their position in a list. Verse numbering can differ between editions; a missing number is labeled instead of shifting the remaining verses.</p>
+        <p id="load-status" role="status">Ready. No chapters are downloaded until you click Load.</p>
+      </section>
+      <section>
+        <label class="sidebar-title note-label" for="study-notes">Personal Notes</label>
+        <textarea id="study-notes" placeholder="Write your study notes here..."></textarea>
+        <p id="notes-status" role="status">One notebook, saved only in this browser.</p>
+        <p>These review-copy notes use separate storage from the original page. They do not sync between devices. Clearing site data deletes them; keep important notes backed up elsewhere.</p>
+      </section>
+      <section>
+        <h2 class="sidebar-title">About this copy</h2>
+        <p>Self-contained review file with a 66-book Protestant Bible menu. No framework, font downloads, account, or API key.</p>
+        <p>Scripture comes from <a href="https://bible-api.com/" target="_blank" rel="noopener noreferrer">bible-api.com</a>. Internet access is required. Only the requested chapter and translations are sent to that service, not your notes. The provider may log normal request metadata such as IP address.</p>
+        <p>The service is rate-limited and has no uptime guarantee. Chapters are cached in memory for this tab; there is no whole-Bible download. Word-difference highlighting and visual overlays are not included in this first comparison step.</p>
+      </section>
+    </aside>
+  </div>
+  <script>
+    'use strict';
+    const bibleBooks = {
+      'Genesis': 50, 'Exodus': 40, 'Leviticus': 27,
+      'Numbers': 36, 'Deuteronomy': 34, 'Joshua': 24,
+      'Judges': 21, 'Ruth': 4, '1 Samuel': 31,
+      '2 Samuel': 24, '1 Kings': 22, '2 Kings': 25,
+      '1 Chronicles': 29, '2 Chronicles': 36, 'Ezra': 10,
+      'Nehemiah': 13, 'Esther': 10, 'Job': 42,
+      'Psalms': 150, 'Proverbs': 31, 'Ecclesiastes': 12,
+      'Song of Solomon': 8, 'Isaiah': 66, 'Jeremiah': 52,
+      'Lamentations': 5, 'Ezekiel': 48, 'Daniel': 12,
+      'Hosea': 14, 'Joel': 3, 'Amos': 9,
+      'Obadiah': 1, 'Jonah': 4, 'Micah': 7,
+      'Nahum': 3, 'Habakkuk': 3, 'Zephaniah': 3,
+      'Haggai': 2, 'Zechariah': 14, 'Malachi': 4,
+      'Matthew': 28, 'Mark': 16, 'Luke': 24,
+      'John': 21, 'Acts': 28, 'Romans': 16,
+      '1 Corinthians': 16, '2 Corinthians': 13, 'Galatians': 6,
+      'Ephesians': 6, 'Philippians': 4, 'Colossians': 4,
+      '1 Thessalonians': 5, '2 Thessalonians': 3, '1 Timothy': 6,
+      '2 Timothy': 4, 'Titus': 3, 'Philemon': 1,
+      'Hebrews': 13, 'James': 5, '1 Peter': 5,
+      '2 Peter': 3, '1 John': 5, '2 John': 1,
+      '3 John': 1, 'Jude': 1, 'Revelation': 22
+    };
+    const bookMenu = document.getElementById('book-select');
+    const chapterMenu = document.getElementById('chapter-select');
+    const loadButton = document.getElementById('load-button');
+    const reader = document.getElementById('reader');
+    const loadStatus = document.getElementById('load-status');
+    const chapterCache = new Map();
+    const translationNames = ['World English Bible (WEB)', 'King James Version (KJV)'];
+
+    for (const name of Object.keys(bibleBooks)) {
+      bookMenu.add(new Option(name, name));
+    }
+    bookMenu.value = 'Luke';
+    function updateChapters() {
+      chapterMenu.replaceChildren();
+      for (let n = 1; n <= bibleBooks[bookMenu.value]; n++) {
+        chapterMenu.add(new Option(`Chapter ${n}`, String(n)));
+      }
+    }
+    bookMenu.addEventListener('change', updateChapters);
+    updateChapters();
+
+    function element(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    }
+
+    async function getChapter(reference, chapter, translation, signal) {
+      const key = `${translation}:${reference}`;
+      if (chapterCache.has(key)) return chapterCache.get(key);
+      const url = `https://bible-api.com/${encodeURIComponent(reference)}` +
+        `?translation=${translation}&single_chapter_book_matching=indifferent`;
+      const response = await fetch(url, { signal, credentials: 'omit' });
+      if (response.status === 429) {
+        throw new Error('Bible service request limit reached. Wait 30 seconds and try again.');
+      }
+      if (!response.ok) throw new Error(`Bible service returned HTTP ${response.status}.`);
+      const data = await response.json();
+      if (!Array.isArray(data.verses) || !data.verses.length || data.verses.some(v =>
+        !v || !Number.isInteger(Number(v.verse)) || Number(v.verse) < 0 ||
+        Number(v.chapter) !== chapter || typeof v.text !== 'string')) {
+        throw new Error('The Bible service returned an unexpected chapter response.');
+      }
+      const verses = new Map(data.verses.map(v => [Number(v.verse), v.text.trim()]));
+      chapterCache.set(key, verses);
+      if (chapterCache.size > 24) chapterCache.delete(chapterCache.keys().next().value);
+      return verses;
+    }
+
+    async function loadScripture() {
+      if (loadButton.disabled) return;
+      const book = bookMenu.value;
+      const chapter = Number(chapterMenu.value);
+      if (!Object.hasOwn(bibleBooks, book) || !Number.isInteger(chapter) || chapter < 1 || chapter > bibleBooks[book]) return;
+      const reference = `${book} ${chapter}`;
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      loadButton.disabled = bookMenu.disabled = chapterMenu.disabled = true;
+      reader.setAttribute('aria-busy', 'true');
+      reader.textContent = `Loading ${reference} in WEB and KJV...`;
+      loadStatus.textContent = 'Loading two translations...';
+      try {
+        const versions = await Promise.all(['web', 'kjv'].map(translation =>
+          getChapter(reference, chapter, translation, controller.signal)));
+        const title = element('h2', 'passage-title', reference);
+        const labels = element('div', 'compare-row compare-labels');
+        translationNames.forEach(name => labels.append(element('strong', '', name)));
+        reader.replaceChildren(title, labels);
+        const numbers = [...new Set([...versions[0].keys(), ...versions[1].keys()])].sort((a, b) => a - b);
+        const fragment = document.createDocumentFragment();
+        for (const number of numbers) {
+          const row = element('section', 'compare-row');
+          row.setAttribute('aria-label', `${reference}:${number}`);
+          versions.forEach((verses, index) => {
+            const cell = element('p', 'verse');
+            const versionLabel = element('span', 'sr-only', `${translationNames[index]}, verse `);
+            const verseNumber = element('span', 'verse-num', String(number));
+            const text = verses.get(number);
+            const words = element('span', text === undefined ? 'missing' : '',
+              text === undefined ? 'Verse not supplied by this edition.' : text);
+            cell.append(versionLabel, verseNumber, words);
+            row.append(cell);
+          });
+          fragment.append(row);
+        }
+        reader.append(fragment);
+        reader.scrollTop = 0;
+        loadStatus.textContent = `${reference}: ${numbers.length} aligned verse rows. WEB left; KJV right.`;
+      } catch (error) {
+        controller.abort();
+        const message = error.name === 'AbortError'
+          ? 'The request timed out. Check your connection, wait a moment, and try Load Chapter again.'
+          : `Could not load both translations. ${error.message}`;
+        reader.replaceChildren(element('h2', 'passage-title', reference), element('p', 'error', message));
+        loadStatus.textContent = 'Not loaded. Use Load Chapter to retry.';
+      } finally {
+        clearTimeout(timeout);
+        loadButton.disabled = bookMenu.disabled = chapterMenu.disabled = false;
+        reader.setAttribute('aria-busy', 'false');
+      }
+    }
+    document.getElementById('chapter-form').addEventListener('submit', event => {
+      event.preventDefault();
+      loadScripture();
+    });
+
+    const notesBox = document.getElementById('study-notes');
+    const notesStatus = document.getElementById('notes-status');
+    const notesKey = 'new-jerusalem-archive:gpt-code:notes:v1';
+    try {
+      notesBox.value = localStorage.getItem(notesKey) ?? '';
+    } catch {
+      notesStatus.textContent = 'Browser storage is unavailable. Copy your notes before leaving.';
+    }
+    notesBox.addEventListener('input', () => {
+      try {
+        localStorage.setItem(notesKey, notesBox.value);
+        notesStatus.textContent = 'Saved in this browser. One notebook across all chapters.';
+      } catch {
+        notesStatus.textContent = 'Could not save. Copy your notes somewhere safe before leaving.';
+      }
+    });
+  </script>
+</body>
+</html>
