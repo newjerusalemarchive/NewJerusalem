@@ -5,14 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="New Jerusalem Archive: read the Bible and compare WEB and KJV verse by verse.">
   <title>New Jerusalem Archive — Review Copy</title>
-  <!-- Standalone review copy. All CSS and JavaScript are in this file.
-       Open in a browser with internet access. No build or API key required.
-       This file does not replace the repository's original index.html. -->
+  <!-- Self-contained review copy. Internet required; no build or API key. -->
   <style>
     :root {
       color-scheme: dark;
-      --bg: #050507; --panel: #0e0a18; --text: #f5f3ff;
-      --muted: #b5aec8; --accent: #a78bfa; --border: #302442;
+      --bg: #050507; --text: #f5f3ff;
+      --muted: #b5aec8; --border: #302442;
       --font-serif: Georgia, 'Times New Roman', serif;
       --font-sans: system-ui, -apple-system, sans-serif;
     }
@@ -139,31 +137,31 @@
   <header>
     <div class="brand">
       <h1 class="logo">New Jerusalem Archive</h1>
-      <pre class="donkey-art" role="img" aria-label="Donkey illustration in Unicode art">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣷⠀⠀⠀⢠⣿
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡾⢋⢻⠀⠀⡠⢁⢸
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⢁⡾⣜⣠⡿⢭⣿⠞
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣴⡷⢿⣟⢓⣛⠁⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣿⡿⢿⠏⠀⠁⠀⢼⣆⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⣿⠟⣿⣣⣎⣠⣀⠀⠀⠀⢻⣆
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣚⣿⣿⣿⣿⠃⣿⣻⣿⡟⠛⠢⣤⠀⣸⠛
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡤⠶⠶⠶⠶⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣶⣶⣿⣿⣿⣿⡧⢸⣏⠻⣿⣿⣜⠆⢼⡆⡇⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⣾⣿⠛⠃⢤⡀⠘⠛⠛⢿⣿⠿⢿⣶⣦⣤⣤⣤⣤⣤⣿⣟⠛⠛⠉⠸⢿⣿⠁⢸⣿⣷⣿⣿⣿⠶⠚⠻⡇⠀
-⠀⠀⠀⠀⠀⠀⠀⣠⢾⡿⣿⠃⠀⠀⠀⠹⣷⣤⠀⠈⠙⠂⠀⠈⠛⠿⣟⠻⢭⣽⣿⠛⢷⡀⠀⠀⠀⠀⢀⣿⣿⣿⡿⠿⣿⣆⣀⠀⢘⡄
-⠀⠀⠀⠀⠀⠀⣰⣿⣾⠁⠀⢀⠀⠀⣤⣤⡌⠙⢷⣦⡀⠀⠀⠴⢤⣄⠀⠽⠶⠂⠹⡀⠀⠈⠓⠀⠀⣸⠻⣿⣿⡟⠀⠀⠹⣿⣿⣿⡟⠉
-⠀⠀⠀⠀⠀⠀⣿⣿⢻⡄⠀⣿⣀⠀⠈⢻⣄⠀⠀⠙⠿⡦⠀⠀⠔⠲⠴⠖⠀⠀⠀⠁⠀⠀⠀⠀⢸⣿⣠⢻⠏⠀⠀⠀⠀⠙⠻⠛⠁⠀
-⠀⠀⠀⠀⠀⢀⣿⣿⣾⣧⠀⠘⣿⡇⠀⢤⣿⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⠃⡀⠀⠀⠀⠀⠀⢸⡇⡿⣏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⢀⣾⣿⡿⠉⣿⠀⠀⠻⠁⠀⠺⢿⣧⣷⡀⠀⠀⠀⠀⠀⠀⢠⣇⢿⣴⡇⠀⠀⠀⠀⣠⣿⢠⣷⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⣀⣤⣾⣿⣿⡿⠃⠀⡇⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣦⡀⠀⠀⠀⠐⠛⠟⠘⣿⣇⠀⠀⠀⢀⣿⣧⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠈⣭⣿⣿⣿⡿⣁⣠⠞⠀⠀⠀⠀⣠⣤⣤⣴⣿⠟⠿⣿⣟⡲⠤⠀⠀⠀⠀⠀⢻⣿⡇⠀⣦⣾⣿⠻⠁⠈⢆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⢰⡿⣿⣿⣿⠁⡫⣿⠂⠀⠀⣠⣼⣿⣿⣿⡿⠁⢀⡔⠁⠉⠙⠓⠺⠿⠶⠶⠶⠿⢻⠀⠀⢹⡟⠻⢷⣤⡀⠈⢳⡀⠀⠀⠀⠀⠀⠀⠀⠀
-⢸⢱⡟⠃⠸⠀⢳⣽⢀⣤⠞⠋⠀⣼⡿⠋⢀⣴⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢇⠀⠹⣇⠀⠀⠉⠓⢦⠈⠛⢦⠀⠀⠀⠀⠀⠀⠀
-⠈⠘⠃⠢⠀⠀⠀⠹⡆⢰⠀⣠⣾⠟⠁⡠⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣆⠀⢸⠀⠀⠀⠀⢸⢷⣶⡞⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⢻⠈⡶⢷⡄⠀⠞⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣋⣠⣼⠆⠀⠀⠀⡸⢰⠏⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⣼⢀⣹⠀⢻⡂⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢻⣹⠏⠀⢀⣠⡾⠃⣸⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⣤⠛⣻⡏⠀⠀⣿⡀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⡇⢠⠀⣿⠉⣻⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⣿⣿⠟⠀⠀⠀⢻⣇⢸⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣄⣈⣾⠛⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣹⣛⣹⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣉⣙⢦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠛⠃⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣧⣤⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+      <pre class="donkey-art" role="img" aria-label="Donkey illustration in Unicode art">                                          ⢀⣴⣷   ⢠⣿
+                                         ⢀⡾⢋⢻  ⡠⢁⢸
+                                         ⢸⢁⡾⣜⣠⡿⢭⣿⠞
+                                         ⢸⣴⡷⢿⣟⢓⣛⠁ 
+                                      ⣀⣤⣿⡿⢿⠏ ⠁ ⢼⣆ 
+                                   ⢀⣴⣾⣿⠟⣿⣣⣎⣠⣀   ⢻⣆
+                                 ⣴⣚⣿⣿⣿⣿⠃⣿⣻⣿⡟⠛⠢⣤ ⣸⠛
+           ⣀⡤⠶⠶⠶⠶⣶⣦⣤⣀         ⢀⣀⣶⣶⣿⣿⣿⣿⡧⢸⣏⠻⣿⣿⣜⠆⢼⡆⡇ 
+         ⣤⣾⣿⠛⠃⢤⡀⠘⠛⠛⢿⣿⠿⢿⣶⣦⣤⣤⣤⣤⣤⣿⣟⠛⠛⠉⠸⢿⣿⠁⢸⣿⣷⣿⣿⣿⠶⠚⠻⡇ 
+       ⣠⢾⡿⣿⠃   ⠹⣷⣤ ⠈⠙⠂ ⠈⠛⠿⣟⠻⢭⣽⣿⠛⢷⡀    ⢀⣿⣿⣿⡿⠿⣿⣆⣀ ⢘⡄
+      ⣰⣿⣾⠁ ⢀  ⣤⣤⡌⠙⢷⣦⡀  ⠴⢤⣄ ⠽⠶⠂⠹⡀ ⠈⠓  ⣸⠻⣿⣿⡟  ⠹⣿⣿⣿⡟⠉
+      ⣿⣿⢻⡄ ⣿⣀ ⠈⢻⣄  ⠙⠿⡦  ⠔⠲⠴⠖   ⠁    ⢸⣿⣠⢻⠏    ⠙⠻⠛⠁ 
+     ⢀⣿⣿⣾⣧ ⠘⣿⡇ ⢤⣿ ⡀         ⣰⠃⡀     ⢸⡇⡿⣏          
+    ⢀⣾⣿⡿⠉⣿  ⠻⠁ ⠺⢿⣧⣷⡀      ⢠⣇⢿⣴⡇    ⣠⣿⢠⣷⡿          
+ ⣀⣤⣾⣿⣿⡿⠃ ⡇       ⣿⣿⣿⣦⡀   ⠐⠛⠟⠘⣿⣇   ⢀⣿⣧⣿⡏           
+⠈⣭⣿⣿⣿⡿⣁⣠⠞    ⣠⣤⣤⣴⣿⠟⠿⣿⣟⡲⠤     ⢻⣿⡇ ⣦⣾⣿⠻⠁⠈⢆          
+⢰⡿⣿⣿⣿⠁⡫⣿⠂  ⣠⣼⣿⣿⣿⡿⠁⢀⡔⠁⠉⠙⠓⠺⠿⠶⠶⠶⠿⢻  ⢹⡟⠻⢷⣤⡀⠈⢳⡀        
+⢸⢱⡟⠃⠸ ⢳⣽⢀⣤⠞⠋ ⣼⡿⠋⢀⣴⠟            ⢇ ⠹⣇  ⠉⠓⢦⠈⠛⢦       
+⠈⠘⠃⠢   ⠹⡆⢰ ⣠⣾⠟⠁⡠⠋⠁             ⢸⣆ ⢸    ⢸⢷⣶⡞       
+        ⢻⠈⡶⢷⡄ ⠞                ⢸⣋⣠⣼⠆   ⡸⢰⠏        
+        ⣼⢀⣹ ⢻⡂⢸                ⠈⢻⣹⠏ ⢀⣠⡾⠃⣸         
+       ⣤⠛⣻⡏  ⣿⡀⡇                ⠈⡇⢠ ⣿⠉⣻⠋⠁         
+       ⣿⣿⠟   ⢻⣇⢸⡄               ⢰⣄⣈⣾⠛⠋⠁           
+              ⣹⣛⣹⣄               ⢹⣉⣙⢦             
+              ⠘⠛⠃⠘               ⠸⣿⣧⣤⡇            
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿</pre>
     </div>
@@ -191,23 +189,24 @@
     <aside class="sidebar" aria-label="Study tools and notes">
       <section>
         <h2 class="sidebar-title">Study Tools</h2>
-        <p><strong>Left: WEB. Right: KJV.</strong> Both columns load the selected chapter. Luke includes all 24 chapters.</p>
-        <p>Verses are paired by number, not by their position in a list. Verse numbering can differ between editions; a missing number is labeled instead of shifting the remaining verses.</p>
-        <p>Enable <strong>Original Languages</strong> above to see Hebrew, Aramaic, or Greek beneath each verse pair. Click an original-language word for its English gloss, transliteration, grammar, Strong’s number, and dictionary senses.</p>
-        <p id="load-status" role="status">Ready. No chapters are downloaded until you click Load.</p>
+        <p><strong>WEB left · KJV right.</strong> Verses match by number; missing verses are labeled.</p>
+        <p>Enable <strong>Original Languages</strong> and click a word for its gloss, transliteration, grammar, and dictionary entry.</p>
+        <p id="load-status" role="status">Ready. Choose a chapter and click Load.</p>
       </section>
       <section>
         <label class="sidebar-title note-label" for="study-notes">Personal Notes</label>
         <textarea id="study-notes" placeholder="Write your study notes here..."></textarea>
         <p id="notes-status" role="status">One notebook, saved only in this browser.</p>
-        <p>These review-copy notes use separate storage from the original page. They do not sync between devices. Clearing site data deletes them; keep important notes backed up elsewhere.</p>
+        <p>No device sync. Copy important notes elsewhere; clearing site data deletes them. Review notes are separate from the original page.</p>
       </section>
       <section>
-        <h2 class="sidebar-title">About this copy</h2>
-        <p>Self-contained review file with a 66-book Protestant Bible menu. No framework, font downloads, account, or API key.</p>
-        <p>English Scripture comes from <a href="https://bible-api.com/" target="_blank" rel="noopener noreferrer">bible-api.com</a>. Original-language words and dictionary entries come from <a href="https://bible.helloao.org/docs/reference/datasets/" target="_blank" rel="noopener noreferrer">AO Lab’s Free Use Bible API</a>. Internet access is required. Providers receive chapter requests or Strong’s-number lookups, not your notes, and may log technical request metadata such as IP address.</p>
-        <p class="attribution">Berean interlinear tables: <a href="https://berean.bible/terms.htm" target="_blank" rel="noopener noreferrer">public domain</a>. TBESH/TBESG lexicon: <a href="https://www.stepbible.org/" target="_blank" rel="noopener noreferrer">STEPBible.org / Tyndale House, Cambridge</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>. AO Lab adapted the source data to JSON. This page reformats its display; definition wording is unchanged.</p>
-        <p>The service is rate-limited and has no uptime guarantee. Chapters are cached in memory for this tab; there is no whole-Bible download. Word-difference highlighting and visual overlays are not included. Original-language word glosses come from the Berean Standard Bible, not from WEB or KJV; source editions and verse numbering may differ. Dictionary senses are not automatic contextual translations.</p>
+        <details>
+          <summary class="sidebar-title">Sources &amp; Privacy</summary>
+          <p>A 66-book Protestant Bible reader. English: <a href="https://bible-api.com/" target="_blank" rel="noopener noreferrer">bible-api.com</a>. Original words and lexicon: <a href="https://bible.helloao.org/docs/reference/datasets/" target="_blank" rel="noopener noreferrer">AO Lab</a>.</p>
+          <p>Internet required. Providers receive chapter or word requests, not notes, and may log IP addresses. Availability and request limits apply. Caches are temporary; no whole-Bible download.</p>
+          <p class="attribution">Berean interlinear: <a href="https://berean.bible/terms.htm" target="_blank" rel="noopener noreferrer">public domain</a>. TBESH/TBESG: <a href="https://www.stepbible.org/" target="_blank" rel="noopener noreferrer">STEPBible.org / Tyndale House, Cambridge</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>. Adapted to JSON by AO Lab; display formatting only here. Definitions unchanged.</p>
+          <p>Word glosses follow BSB, not WEB/KJV. Editions and verse numbering may differ. Dictionary senses need context; this is not automatic translation. Word-difference highlighting is not included.</p>
+        </details>
       </section>
     </aside>
   </div>
