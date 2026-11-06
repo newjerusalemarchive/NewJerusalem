@@ -108,6 +108,31 @@
       .verse { padding: 8px 4px; font-size: 1rem; }
     }
     @media (max-width: 600px) { .donkey-art { font-size: 3px; } }
+
+    [hidden] { display: none !important; }
+    .study-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px; padding: 10px 24px; background: #100b1a; border-bottom: 1px solid var(--border); font-size: .8rem; }
+    .toggle-label { display: inline-flex; align-items: center; gap: 9px; color: #fff; font-weight: 700; cursor: pointer; }
+    .toggle-label input { width: 18px; height: 18px; accent-color: #8b5cf6; }
+    #original-status { flex: 1; min-width: 180px; color: var(--muted); }
+    #retry-original { font-size: .8rem; }
+    .original-panel { grid-column: 1 / -1; margin: 0 0 14px; padding: 10px 12px; background: #171025; border: 1px solid #433065; border-radius: 10px; }
+    .original-heading { margin: 0 0 8px; color: #c4b5fd; font: .75rem/1.5 var(--font-sans); }
+    .original-words { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; }
+    .original-word { min-height: 44px; padding: 2px 9px; background: #20152f; border-color: #493464; color: #fff; font: 1.35rem/1.9 Georgia, 'Times New Roman', serif; unicode-bidi: isolate; }
+    .original-word[lang="hbo"], .original-word[lang="arc"] { font-family: 'Noto Serif Hebrew', 'DejaVu Sans', serif; font-size: 1.5rem; }
+    #word-dialog { width: min(92vw, 690px); max-height: 85vh; max-height: 85dvh; padding: 22px; overflow: auto; border: 1px solid #7c3aed; border-radius: 16px; background: #100b1a; color: var(--text); box-shadow: 0 20px 80px #0009; font-family: var(--font-sans); }
+    #word-dialog::backdrop { background: #030108b8; }
+    .word-dialog-header { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+    .word-dialog-header h2 { margin: 0; font: 2rem/1.8 Georgia, 'DejaVu Sans', serif; overflow-wrap: anywhere; }
+    .word-dialog-header form { margin: 0; }
+    .word-fields { display: grid; grid-template-columns: minmax(100px, .8fr) minmax(0, 2fr); gap: 8px 16px; font-size: .9rem; }
+    .word-fields dt { color: #c4b5fd; font-weight: 700; }
+    .word-fields dd { margin: 0; overflow-wrap: anywhere; }
+    .study-note, .attribution { color: var(--muted); font: .8rem/1.6 var(--font-sans); }
+    .lexicon-sense { margin-top: 12px; padding: 12px; border: 1px solid var(--border); border-radius: 10px; }
+    .lexicon-sense summary { cursor: pointer; color: #ddd6fe; font-weight: 700; }
+    .lexicon-definition { white-space: pre-wrap; overflow-wrap: anywhere; unicode-bidi: plaintext; font: .95rem/1.7 var(--font-sans); }
+    @media (max-width: 600px) { .study-toolbar { padding: 10px 14px; } .original-panel { padding: 10px 8px; } #word-dialog { padding: 16px; } .word-fields { grid-template-columns: 1fr; gap: 5px; } .word-fields dd { margin-bottom: 8px; } }
   </style>
 </head>
 <body>
@@ -152,6 +177,11 @@
       <button class="btn-primary" id="load-button" type="submit">Load Chapter</button>
     </form>
   </header>
+  <div class="study-toolbar" aria-label="Original-language study controls">
+    <label class="toggle-label"><input id="original-toggle" type="checkbox"> Original Languages</label>
+    <span id="original-status" role="status">Off. Enable for Hebrew, Aramaic, and Greek word study. English glosses follow BSB.</span>
+    <button id="retry-original" type="button" hidden>Retry original text</button>
+  </div>
   <div class="workspace">
     <main class="reader-pane" id="reader" aria-busy="false">
       <h2 class="passage-title">Welcome to the Archive</h2>
@@ -163,6 +193,7 @@
         <h2 class="sidebar-title">Study Tools</h2>
         <p><strong>Left: WEB. Right: KJV.</strong> Both columns load the selected chapter. Luke includes all 24 chapters.</p>
         <p>Verses are paired by number, not by their position in a list. Verse numbering can differ between editions; a missing number is labeled instead of shifting the remaining verses.</p>
+        <p>Enable <strong>Original Languages</strong> above to see Hebrew, Aramaic, or Greek beneath each verse pair. Click an original-language word for its English gloss, transliteration, grammar, Strong’s number, and dictionary senses.</p>
         <p id="load-status" role="status">Ready. No chapters are downloaded until you click Load.</p>
       </section>
       <section>
@@ -174,11 +205,20 @@
       <section>
         <h2 class="sidebar-title">About this copy</h2>
         <p>Self-contained review file with a 66-book Protestant Bible menu. No framework, font downloads, account, or API key.</p>
-        <p>Scripture comes from <a href="https://bible-api.com/" target="_blank" rel="noopener noreferrer">bible-api.com</a>. Internet access is required. Only the requested chapter and translations are sent to that service, not your notes. The provider may log normal request metadata such as IP address.</p>
-        <p>The service is rate-limited and has no uptime guarantee. Chapters are cached in memory for this tab; there is no whole-Bible download. Word-difference highlighting and visual overlays are not included in this first comparison step.</p>
+        <p>English Scripture comes from <a href="https://bible-api.com/" target="_blank" rel="noopener noreferrer">bible-api.com</a>. Original-language words and dictionary entries come from <a href="https://bible.helloao.org/docs/reference/datasets/" target="_blank" rel="noopener noreferrer">AO Lab’s Free Use Bible API</a>. Internet access is required. Providers receive chapter requests or Strong’s-number lookups, not your notes, and may log technical request metadata such as IP address.</p>
+        <p class="attribution">Berean interlinear tables: <a href="https://berean.bible/terms.htm" target="_blank" rel="noopener noreferrer">public domain</a>. TBESH/TBESG lexicon: <a href="https://www.stepbible.org/" target="_blank" rel="noopener noreferrer">STEPBible.org / Tyndale House, Cambridge</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>. AO Lab adapted the source data to JSON. This page reformats its display; definition wording is unchanged.</p>
+        <p>The service is rate-limited and has no uptime guarantee. Chapters are cached in memory for this tab; there is no whole-Bible download. Word-difference highlighting and visual overlays are not included. Original-language word glosses come from the Berean Standard Bible, not from WEB or KJV; source editions and verse numbering may differ. Dictionary senses are not automatic contextual translations.</p>
       </section>
     </aside>
   </div>
+  <dialog id="word-dialog" aria-labelledby="word-title">
+    <div class="word-dialog-header">
+      <h2 id="word-title">Word study</h2>
+      <form method="dialog"><button type="submit" aria-label="Close word study">Close</button></form>
+    </div>
+    <div id="word-details"></div>
+    <p class="attribution">STEPBible.org / Tyndale House, Cambridge (TBESH/TBESG), <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>. Source adapted to JSON by AO Lab; display formatting only by this page. Definitions are unmodified. Berean word glosses are public domain.</p>
+  </dialog>
   <script>
     'use strict';
     const bibleBooks = {
@@ -255,57 +295,268 @@
       return verses;
     }
 
+    // Original-language data uses the same canonical book order as bibleBooks.
+    const originalBookIds = 'GEN EXO LEV NUM DEU JOS JDG RUT 1SA 2SA 1KI 2KI 1CH 2CH EZR NEH EST JOB PSA PRO ECC SNG ISA JER LAM EZK DAN HOS JOL AMO OBA JON MIC NAM HAB ZEP HAG ZEC MAL MAT MRK LUK JHN ACT ROM 1CO 2CO GAL EPH PHP COL 1TH 2TH 1TI 2TI TIT PHM HEB JAS 1PE 2PE 1JN 2JN 3JN JUD REV'.split(' ');
+    const originalBooks = Object.fromEntries(Object.keys(bibleBooks).map((name, i) => [name, originalBookIds[i]]));
+    const originalToggle = document.getElementById('original-toggle');
+    const originalStatus = document.getElementById('original-status');
+    const retryOriginal = document.getElementById('retry-original');
+    const wordDialog = document.getElementById('word-dialog');
+    const wordTitle = document.getElementById('word-title');
+    const wordDetails = document.getElementById('word-details');
+    const originalCache = new Map();
+    const lexiconCache = new Map();
+    const languageInfo = {
+      hebrew: { name: 'Hebrew', code: 'hbo', dir: 'rtl' },
+      aramaic: { name: 'Aramaic', code: 'arc', dir: 'rtl' },
+      greek: { name: 'Greek', code: 'grc', dir: 'ltr' }
+    };
+    let currentChapter = null, originalController = null, originalRequest = 0;
+    let wordController = null, wordRequest = 0;
+
+    function keepCached(cache, key, value, maximum) {
+      cache.set(key, value);
+      if (cache.size > maximum) cache.delete(cache.keys().next().value);
+    }
+    async function studyJSON(url, signal) {
+      const response = await fetch(url, { signal, credentials: 'omit' });
+      if (response.status === 404) throw new Error('No study data is available for this entry.');
+      if (!response.ok) throw new Error(`Study service returned HTTP ${response.status}. Please retry later.`);
+      return response.json();
+    }
+    function cancelWordLookup() {
+      wordRequest++;
+      if (wordController) wordController.abort();
+      wordController = null;
+    }
+    wordDialog.addEventListener('close', cancelWordLookup);
+    function cancelOriginalLookup() {
+      originalRequest++;
+      if (originalController) originalController.abort();
+      originalController = null;
+    }
+
+    function renderComparison(preserveScroll = false) {
+      if (!currentChapter) return;
+      const state = currentChapter, scroll = reader.scrollTop;
+      const title = element('h2', 'passage-title', state.reference);
+      const labels = element('div', 'compare-row compare-labels');
+      translationNames.forEach(name => labels.append(element('strong', '', name)));
+      const verseNumbers = new Set([...state.versions[0].keys(), ...state.versions[1].keys()]);
+      if (originalToggle.checked && state.original) {
+        for (const number of state.original.keys()) verseNumbers.add(number);
+      }
+      const numbers = [...verseNumbers].sort((a, b) => a - b);
+      const fragment = document.createDocumentFragment();
+      for (const number of numbers) {
+        const row = element('section', 'compare-row');
+        row.setAttribute('aria-label', `${state.reference}:${number}`);
+        state.versions.forEach((verses, index) => {
+          const cell = element('p', 'verse');
+          const text = verses.get(number);
+          cell.append(element('span', 'sr-only', `${translationNames[index]}, verse `),
+            element('span', 'verse-num', String(number)),
+            element('span', text === undefined ? 'missing' : '', text === undefined ? 'Verse not supplied by this edition.' : text));
+          row.append(cell);
+        });
+        if (originalToggle.checked) {
+          const panel = element('div', 'original-panel');
+          const words = state.original && state.original.get(number);
+          if (words && words.length) {
+            const languages = [...new Set(words.map(word => word.language))];
+            panel.append(element('p', 'original-heading', `${languages.map(key => languageInfo[key].name).join(' / ')} · Berean interlinear · click a word`));
+            const list = element('div', 'original-words');
+            const info = languageInfo[words[0].language];
+            list.dir = info.dir;
+            list.lang = info.code;
+            for (const word of words) {
+              const button = element('button', 'original-word', word.text);
+              const wordInfo = languageInfo[word.language];
+              button.type = 'button';
+              button.dir = wordInfo.dir;
+              button.lang = wordInfo.code;
+              button.title = `${word.transliteration || ''} · BSB gloss: ${word.gloss === null ? 'not translated separately' : word.gloss || 'not supplied'} · ${word.strongs || 'no Strong number'}`;
+              button.setAttribute('aria-haspopup', 'dialog');
+              button.setAttribute('aria-label', `${word.text}. BSB gloss: ${word.gloss || 'not translated separately'}. Open word study.`);
+              button.addEventListener('click', () => showWord(word, `${state.reference}:${number}`));
+              list.append(button);
+            }
+            panel.append(list);
+          } else {
+            const message = state.original ? 'Original-language text is not supplied for this verse number.'
+              : state.originalError ? 'Original-language data did not load. Use Retry original text above.'
+              : 'Loading original-language text...';
+            panel.append(element('p', 'original-heading', message));
+          }
+          row.append(panel);
+        }
+        fragment.append(row);
+      }
+      reader.replaceChildren(title, labels, fragment);
+      reader.scrollTop = preserveScroll ? scroll : 0;
+      loadStatus.textContent = `${state.reference}: ${numbers.length} verse rows. WEB left; KJV right.`;
+    }
+
+    async function loadOriginalText() {
+      if (!currentChapter || !originalToggle.checked || loadButton.disabled) return;
+      cancelOriginalLookup();
+      const state = currentChapter, ticket = originalRequest;
+      const id = originalBooks[state.book];
+      const key = `${id}:${state.chapter}`;
+      retryOriginal.hidden = true;
+      state.originalError = null;
+      if (originalCache.has(key)) {
+        state.original = originalCache.get(key);
+        originalStatus.textContent = `${state.reference}: original-language text loaded. English glosses follow BSB.`;
+        renderComparison(true);
+        return;
+      }
+      state.original = null;
+      originalStatus.textContent = `Loading ${state.reference} original-language text...`;
+      renderComparison(true);
+      const controller = new AbortController();
+      originalController = controller;
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      try {
+        const data = await studyJSON(`https://bible.helloao.org/api/d/bsb-interlinear/${id}/${state.chapter}.json`, controller.signal);
+        if (data.dataset?.id !== 'bsb-interlinear' || data.book?.id !== id || data.chapter?.number !== state.chapter || !Array.isArray(data.chapter.content)) {
+          throw new Error('The study service returned an unexpected chapter.');
+        }
+        const verses = new Map();
+        for (const verse of data.chapter.content) {
+          if (!Number.isInteger(verse.verse) || verse.verse < 0 || !Array.isArray(verse.words) || verse.words.some(word => !word || !languageInfo[word.language] || typeof word.text !== 'string' || !Number.isFinite(word.pos))) {
+            throw new Error('The original-language word format was not recognized.');
+          }
+          verses.set(verse.verse, [...verse.words].sort((a, b) => a.pos - b.pos));
+        }
+        if (!verses.size) throw new Error('No original-language verses were returned.');
+        if (ticket !== originalRequest || state !== currentChapter || !originalToggle.checked || controller.signal.aborted) return;
+        keepCached(originalCache, key, verses, 12);
+        state.original = verses;
+        originalStatus.textContent = `${state.reference}: original-language text loaded. English glosses follow BSB.`;
+        renderComparison(true);
+      } catch (error) {
+        if (ticket !== originalRequest || state !== currentChapter || !originalToggle.checked) return;
+        state.originalError = error.name === 'AbortError' ? 'Study request timed out. Please retry.' : error.message;
+        originalStatus.textContent = state.originalError;
+        retryOriginal.hidden = false;
+        renderComparison(true);
+      } finally {
+        clearTimeout(timeout);
+        if (originalController === controller) originalController = null;
+      }
+    }
+    originalToggle.addEventListener('change', () => {
+      cancelOriginalLookup();
+      retryOriginal.hidden = true;
+      if (!originalToggle.checked) {
+        cancelWordLookup();
+        if (wordDialog.open) wordDialog.close();
+        originalStatus.textContent = 'Original languages off. Your English comparison is unchanged.';
+        renderComparison(true);
+      } else if (currentChapter) {
+        void loadOriginalText();
+      } else {
+        originalStatus.textContent = 'Choose a chapter and click Load Chapter to study its original-language words.';
+      }
+    });
+    retryOriginal.addEventListener('click', () => { void loadOriginalText(); });
+
+    async function showWord(word, reference) {
+      cancelWordLookup();
+      const ticket = wordRequest;
+      const info = languageInfo[word.language];
+      wordTitle.textContent = word.text;
+      wordTitle.dir = info.dir;
+      wordTitle.lang = info.code;
+      const fields = element('dl', 'word-fields');
+      for (const [label, value] of [
+        ['Reference', reference], ['Language', info.name],
+        ['BSB English gloss', word.gloss === null ? 'Not translated as a separate word in BSB.' : word.gloss || 'Not supplied.'],
+        ['Transliteration', word.transliteration || 'Not supplied.'],
+        ["Strong’s number", word.strongs || 'Not supplied.'],
+        ['Grammar', word.parsingFull || word.parsing || 'Not supplied.']
+      ]) fields.append(element('dt', '', label), element('dd', '', value));
+      const definitions = element('div', 'word-definitions');
+      definitions.setAttribute('aria-busy', 'true');
+      wordDetails.replaceChildren(fields, element('p', 'study-note', 'The verse-specific English gloss is from the Berean Standard Bible, not an automatic alignment to WEB or KJV. Dictionary senses require context.'), definitions);
+      if (!wordDialog.open) wordDialog.showModal();
+      if (typeof word.strongs !== 'string' || !/^[HG]\d{4}$/.test(word.strongs)) {
+        definitions.textContent = 'This word has no supported Strong’s number; no dictionary request was made.';
+        definitions.setAttribute('aria-busy', 'false');
+        return;
+      }
+      const strongs = word.strongs;
+      definitions.textContent = 'Loading STEPBible dictionary...';
+      const controller = new AbortController();
+      wordController = controller;
+      const timeout = setTimeout(() => controller.abort(), 12000);
+      try {
+        let entry = lexiconCache.get(strongs);
+        if (!entry) {
+          const data = await studyJSON(`https://bible.helloao.org/api/d/stepbible-lexicon/lexicon/${strongs}.json`, controller.signal);
+          if (data.dataset?.id !== 'stepbible-lexicon' || data.entry?.id !== strongs || !Array.isArray(data.entry.senses) || data.entry.senses.some(sense => typeof sense.lemma !== 'string' || typeof sense.definition !== 'string')) {
+            throw new Error('The dictionary response was not recognized.');
+          }
+          entry = data.entry;
+          if (controller.signal.aborted) return;
+          keepCached(lexiconCache, strongs, entry, 100);
+        }
+        if (ticket !== wordRequest || !wordDialog.open || controller.signal.aborted) return;
+        definitions.replaceChildren(element('h3', '', `Dictionary: ${strongs}`));
+        if (!entry.senses.length) definitions.append(element('p', '', 'No dictionary senses were supplied.'));
+        for (const sense of entry.senses) {
+          const details = element('details', 'lexicon-sense');
+          details.open = entry.senses.length === 1;
+          details.append(element('summary', '', `${sense.lemma} — ${sense.gloss || 'definition'} (${sense.id})`),
+            element('p', 'study-note', [sense.transliteration, sense.partOfSpeech].filter(Boolean).join(' · ')),
+            element('p', 'lexicon-definition', sense.definition));
+          definitions.append(details);
+        }
+      } catch (error) {
+        if (ticket !== wordRequest || !wordDialog.open) return;
+        definitions.textContent = error.name === 'AbortError' ? 'Dictionary request timed out. Close this window and click the word again to retry.' : `${error.message} Close this window and click the word again to retry.`;
+      } finally {
+        clearTimeout(timeout);
+        if (wordController === controller) wordController = null;
+        if (ticket === wordRequest) definitions.setAttribute('aria-busy', 'false');
+      }
+    }
+
     async function loadScripture() {
       if (loadButton.disabled) return;
       const book = bookMenu.value;
       const chapter = Number(chapterMenu.value);
       if (!Object.hasOwn(bibleBooks, book) || !Number.isInteger(chapter) || chapter < 1 || chapter > bibleBooks[book]) return;
+      cancelOriginalLookup();
+      cancelWordLookup();
+      if (wordDialog.open) wordDialog.close();
+      currentChapter = null;
+      retryOriginal.hidden = true;
       const reference = `${book} ${chapter}`;
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 15000);
-      loadButton.disabled = bookMenu.disabled = chapterMenu.disabled = true;
+      loadButton.disabled = bookMenu.disabled = chapterMenu.disabled = originalToggle.disabled = true;
       reader.setAttribute('aria-busy', 'true');
       reader.textContent = `Loading ${reference} in WEB and KJV...`;
       loadStatus.textContent = 'Loading two translations...';
+      originalStatus.textContent = originalToggle.checked ? 'Original text will load after the English comparison.' : 'Original languages off.';
       try {
-        const versions = await Promise.all(['web', 'kjv'].map(translation =>
-          getChapter(reference, chapter, translation, controller.signal)));
-        const title = element('h2', 'passage-title', reference);
-        const labels = element('div', 'compare-row compare-labels');
-        translationNames.forEach(name => labels.append(element('strong', '', name)));
-        reader.replaceChildren(title, labels);
-        const numbers = [...new Set([...versions[0].keys(), ...versions[1].keys()])].sort((a, b) => a - b);
-        const fragment = document.createDocumentFragment();
-        for (const number of numbers) {
-          const row = element('section', 'compare-row');
-          row.setAttribute('aria-label', `${reference}:${number}`);
-          versions.forEach((verses, index) => {
-            const cell = element('p', 'verse');
-            const versionLabel = element('span', 'sr-only', `${translationNames[index]}, verse `);
-            const verseNumber = element('span', 'verse-num', String(number));
-            const text = verses.get(number);
-            const words = element('span', text === undefined ? 'missing' : '',
-              text === undefined ? 'Verse not supplied by this edition.' : text);
-            cell.append(versionLabel, verseNumber, words);
-            row.append(cell);
-          });
-          fragment.append(row);
-        }
-        reader.append(fragment);
-        reader.scrollTop = 0;
-        loadStatus.textContent = `${reference}: ${numbers.length} aligned verse rows. WEB left; KJV right.`;
+        const versions = await Promise.all(['web', 'kjv'].map(translation => getChapter(reference, chapter, translation, controller.signal)));
+        currentChapter = { book, chapter, reference, versions, original: null, originalError: null };
+        renderComparison();
       } catch (error) {
         controller.abort();
-        const message = error.name === 'AbortError'
-          ? 'The request timed out. Check your connection, wait a moment, and try Load Chapter again.'
-          : `Could not load both translations. ${error.message}`;
+        const message = error.name === 'AbortError' ? 'The request timed out. Check your connection and try Load Chapter again.' : `Could not load both translations. ${error.message}`;
         reader.replaceChildren(element('h2', 'passage-title', reference), element('p', 'error', message));
         loadStatus.textContent = 'Not loaded. Use Load Chapter to retry.';
+        originalStatus.textContent = 'Load an English chapter before enabling original-language study.';
       } finally {
         clearTimeout(timeout);
-        loadButton.disabled = bookMenu.disabled = chapterMenu.disabled = false;
+        loadButton.disabled = bookMenu.disabled = chapterMenu.disabled = originalToggle.disabled = false;
         reader.setAttribute('aria-busy', 'false');
       }
+      if (currentChapter && originalToggle.checked) void loadOriginalText();
     }
     document.getElementById('chapter-form').addEventListener('submit', event => {
       event.preventDefault();
